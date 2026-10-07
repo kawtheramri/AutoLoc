@@ -1,3 +1,3 @@
 # AutoLoc
-## Étudiante
+## Étudiant
 Kawther Amri
