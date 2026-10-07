@@ -3,6 +3,8 @@ package tn.esprit.autoloc.domain;
 import jakarta.persistence.*;
 import lombok.*;
 import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter @Setter
@@ -30,4 +32,10 @@ public class Vehicule {
 
     @ManyToOne
     private Agence agence;
+
+    @OneToMany(mappedBy = "vehicule", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Reservation> reservations = new HashSet<>();
+
+    @ManyToMany(mappedBy = "vehicules")
+    private Set<Equipement> equipements = new HashSet<>();
 }
