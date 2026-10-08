@@ -123,16 +123,26 @@ public class AgenceTests {
 
     @Test
     public void loadPagedAgences() {
-        Pageable pageable = PageRequest.of(0, 2, Sort.by("idAgence").descending());
-        Page<Agence> page = fullAgenceRepository.findAll(pageable);
-
         StringBuilder result = new StringBuilder();
-        result.append("Total Pages : ").append(page.getTotalPages()).append("\n");
-        result.append("Current Page : ").append(page.getNumber()).append("\n");
+        int pageNum = 0;
+        int pageSize = 2;
+        Page<Agence> page;
 
-        for (Agence agence : page.getContent()) {
-            result.append(agence.getIdAgence()).append(" | ").append(agence.getNom()).append("\n");
-        }
+        do {
+            Pageable pageable = PageRequest.of(pageNum, pageSize, Sort.by("idAgence").descending());
+            page = fullAgenceRepository.findAll(pageable);
+
+            result.append("--- PAGE ").append(page.getNumber() + 1)
+                    .append(" / ").append(page.getTotalPages()).append(" ---\n");
+
+            for (Agence agence : page.getContent()) {
+                result.append(agence.getIdAgence()).append(" | ").append(agence.getNom()).append("\n");
+            }
+
+            result.append("\n");
+            pageNum++;
+
+        } while (page.hasNext());
 
         fail(result.toString());
     }
