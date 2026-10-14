@@ -2,17 +2,20 @@ package tn.esprit.autoloc;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 import tn.esprit.autoloc.domain.Agence;
 import tn.esprit.autoloc.domain.CategorieVehicule;
 import tn.esprit.autoloc.domain.StatutVehicule;
 import tn.esprit.autoloc.domain.Vehicule;
 import tn.esprit.autoloc.repository.IAgenceRepository;
+import tn.esprit.autoloc.service.IAgenceService;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -20,6 +23,7 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
+@Repository
 interface AgenceRepositoryMock extends CrudRepository<Agence, Long> {}
 
 @SpringBootTest
@@ -30,6 +34,10 @@ public class AgenceTests {
 
     @Autowired
     private IAgenceRepository fullAgenceRepository;
+
+    @Autowired
+    @Qualifier("agenceServiceImpl")
+    private IAgenceService agenceService;
 
     private void addAgence(CrudRepository<Agence, Long> repository) {
         int timestamp = (int) System.currentTimeMillis();
@@ -64,6 +72,23 @@ public class AgenceTests {
         v2.setAgence(agence);
 
         repository.save(agence);
+    }
+
+    @Test
+    public void createAgence() {
+        int timestamp = (int) System.currentTimeMillis();
+
+        Agence agence = Agence.builder()
+                .nom("Agence service " + timestamp)
+                .adresse("1 Rue Hedi")
+                .telephone("71585874")
+                .ville("Tunis")
+                .build();
+
+        Agence created = agenceService.create(agence);
+
+        fail("Agence créée : " + created.getIdAgence() + " | " + created.getNom()
+                + " | " + created.getVille());
     }
 
     @Test
