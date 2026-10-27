@@ -8,6 +8,10 @@ public interface IGenericService<T, ID> {
 
     T create(T entity);
 
+    default T save(T entity) {
+        return create(entity);
+    }
+
     T findById(ID id);
 
     List<T> findAll();

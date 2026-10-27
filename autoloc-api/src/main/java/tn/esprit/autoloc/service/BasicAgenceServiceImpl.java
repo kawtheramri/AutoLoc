@@ -38,6 +38,14 @@ public class BasicAgenceServiceImpl implements IAgenceService {
     }
 
     @Override
+    public Agence save(Agence agence) {
+        if (agence.getIdAgence() == null) {
+            return create(agence);
+        }
+        return update(agence.getIdAgence(), agence);
+    }
+
+    @Override
     public Agence findById(Long id) {
         return agenceRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Agence", String.valueOf(id)));

@@ -15,9 +15,11 @@ import tn.esprit.autoloc.domain.CategorieVehicule;
 import tn.esprit.autoloc.domain.StatutVehicule;
 import tn.esprit.autoloc.domain.Vehicule;
 import tn.esprit.autoloc.repository.IAgenceRepository;
+import tn.esprit.autoloc.repository.IVehiculeRepository;
 import tn.esprit.autoloc.service.IAgenceService;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -34,6 +36,9 @@ public class AgenceTests {
 
     @Autowired
     private IAgenceRepository fullAgenceRepository;
+
+    @Autowired
+    private IVehiculeRepository vehiculeRepository;
 
     @Autowired
     @Qualifier("agenceServiceImpl")
@@ -170,5 +175,85 @@ public class AgenceTests {
         } while (page.hasNext());
 
         fail(result.toString());
+    }
+
+    // 24. Tests de modification (Deux tests)
+    private void updateAgence(CrudRepository<Agence, Long> repository, String repoName) {
+        int timestamp = (int) System.currentTimeMillis();
+
+        Agence agence = repository.findAll().iterator().hasNext()
+                ? repository.findAll().iterator().next()
+                : null;
+
+        if (agence == null) {
+            addAgence(repository);
+            agence = repository.findAll().iterator().next();
+        }
+
+        agence.setNom("Agence modifiée " + timestamp);
+        agence.setTelephone("71333333");
+        agence.setVille("Ariana");
+
+        Agence updated = repository.save(agence);
+
+        fail("=== Dépôt : " + repoName + " ===\nAgence modifiée : "
+                + updated.getIdAgence() + " | " + updated.getNom()
+                + " | " + updated.getVille() + " | " + updated.getTelephone());
+    }
+
+    @Test
+    public void basicUpdateAgence() {
+        updateAgence(basicAgenceRepository, "basicAgenceRepository");
+    }
+
+    @Test
+    public void fullUpdateAgence() {
+        updateAgence(fullAgenceRepository, "fullAgenceRepository");
+    }
+
+    // 25. Tests de suppression (Deux tests)
+    private void deleteAgence(CrudRepository<Agence, Long> repository, String repoName) {
+        addAgence(repository);
+        Agence agence = null;
+        for (Agence a : repository.findAll()) {
+            if (a.getVehicules() != null && !a.getVehicules().isEmpty()) {
+                agence = a;
+                break;
+            }
+        }
+
+        if (agence == null) {
+            fail("Aucune agence avec véhicules trouvée.");
+            return;
+        }
+
+        Long id = agence.getIdAgence();
+        int nbVehicules = agence.getVehicules().size();
+
+        // Aide : désaffecter le parent des véhicules avant de supprimer l'agence
+        if (agence.getVehicules() != null) {
+            for (Vehicule vehicule : agence.getVehicules()) {
+                vehicule.setAgence(null);
+                vehiculeRepository.save(vehicule);
+            }
+            agence.setVehicules(new HashSet<>());
+            repository.save(agence);
+        }
+
+        // Suppression de l'agence
+        repository.deleteById(id);
+
+        fail("=== Dépôt : " + repoName + " ===\nAgence supprimée : ID "
+                + id + " (après désaffectation de " + nbVehicules + " véhicules)");
+    }
+
+    @Test
+    public void basicDeleteAgence() {
+        deleteAgence(basicAgenceRepository, "basicAgenceRepository");
+    }
+
+    @Test
+    public void fullDeleteAgence() {
+        deleteAgence(fullAgenceRepository, "fullAgenceRepository");
     }
 }

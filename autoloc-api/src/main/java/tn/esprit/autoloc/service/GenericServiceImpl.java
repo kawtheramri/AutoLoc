@@ -32,6 +32,15 @@ public abstract class GenericServiceImpl<T, ID> implements IGenericService<T, ID
     }
 
     @Override
+    public T save(T entity) {
+        ID id = getId(entity);
+        if (id == null) {
+            return create(entity);
+        }
+        return update(id, entity);
+    }
+
+    @Override
     public T findById(ID id) {
         return repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(getEntityName(), String.valueOf(id)));
