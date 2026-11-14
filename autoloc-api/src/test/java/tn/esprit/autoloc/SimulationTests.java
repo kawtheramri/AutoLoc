@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class SimulationTests {
 
     private VehiculeServiceImpl vehiculeService() {
-        return new VehiculeServiceImpl(null, new StrategieOffres(List.of(
+        return new VehiculeServiceImpl(null, null, null, new StrategieOffres(List.of(
                 new StandardStrategie(),
                 new WeekendStrategie(),
                 new LongueDureeStrategie())));

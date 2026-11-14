@@ -1,5 +1,6 @@
 package tn.esprit.autoloc.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -32,5 +33,6 @@ public class Equipement {
             joinColumns = @JoinColumn(name = "id_equipement"),
             inverseJoinColumns = @JoinColumn(name = "id_vehicule")
     )
+    @JsonIgnoreProperties("equipements")
     private Set<Vehicule> vehicules = new HashSet<>();
 }

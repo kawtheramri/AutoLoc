@@ -1,19 +1,31 @@
 package tn.esprit.autoloc.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import tn.esprit.autoloc.Utils;
 import tn.esprit.autoloc.calcul.StrategieOffres;
 import tn.esprit.autoloc.calcul.VehiculeOffre;
+import tn.esprit.autoloc.domain.Equipement;
 import tn.esprit.autoloc.domain.Vehicule;
+import tn.esprit.autoloc.exception.ResourceNotFoundException;
+import tn.esprit.autoloc.repository.IAgenceRepository;
+import tn.esprit.autoloc.repository.IEquipementRepository;
 import tn.esprit.autoloc.repository.IVehiculeRepository;
 
 @Service
 public class VehiculeServiceImpl extends GenericServiceImpl<Vehicule, Long> implements IVehiculeService {
 
+    private final IAgenceRepository agenceRepository;
+    private final IEquipementRepository equipementRepository;
     private final StrategieOffres strategies;
 
-    public VehiculeServiceImpl(IVehiculeRepository vehiculeRepository, StrategieOffres strategies) {
+    public VehiculeServiceImpl(IVehiculeRepository vehiculeRepository,
+                               IAgenceRepository agenceRepository,
+                               IEquipementRepository equipementRepository,
+                               StrategieOffres strategies) {
         super(vehiculeRepository);
+        this.agenceRepository = agenceRepository;
+        this.equipementRepository = equipementRepository;
         this.strategies = strategies;
     }
 
@@ -54,5 +66,36 @@ public class VehiculeServiceImpl extends GenericServiceImpl<Vehicule, Long> impl
     @Override
     public double calculTarif(Vehicule vehicule, int jours, VehiculeOffre offre) {
         return strategies.get(offre).calculerTarif(vehicule, jours);
+    }
+
+    // Étape 1 : minimaliste
+    @Override
+    @Transactional
+    public Vehicule desaffecter(Long idVehicule) {
+        Vehicule v = findById(idVehicule);
+        v.setAgence(null);
+        return v;
+    }
+
+    // Étape 4
+    @Override
+    @Transactional
+    public Vehicule affecterAgence(Long idVehicule, Long idAgence) {
+        Vehicule v = findById(idVehicule);
+        v.setAgence(agenceRepository.findById(idAgence)
+                .orElseThrow(() -> new ResourceNotFoundException("Agence", String.valueOf(idAgence))));
+        return v;
+    }
+
+    // Étape 6
+    @Override
+    @Transactional
+    public Vehicule affecterEquipement(Long idVehicule, Long idEquipement) {
+        Vehicule v = findById(idVehicule);
+        Equipement e = equipementRepository.findById(idEquipement)
+                .orElseThrow(() -> new ResourceNotFoundException("Equipement", String.valueOf(idEquipement)));
+        v.getEquipements().add(e);
+        e.getVehicules().add(v);      // synchronise l'autre côté (celui qui porte la table de jointure)
+        return v;
     }
 }

@@ -1,5 +1,6 @@
 package tn.esprit.autoloc.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import java.math.BigDecimal;
@@ -37,5 +38,6 @@ public class Vehicule {
     private Set<Reservation> reservations = new HashSet<>();
 
     @ManyToMany(mappedBy = "vehicules")
+    @JsonIgnoreProperties("vehicules")
     private Set<Equipement> equipements = new HashSet<>();
 }
