@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import tn.esprit.autoloc.calcul.VehiculeOffre;
 import tn.esprit.autoloc.domain.Agence;
+import tn.esprit.autoloc.service.IAgenceEmployeService;
 import tn.esprit.autoloc.service.IAgenceService;
 import tn.esprit.autoloc.service.IAgenceSimulation;
 
@@ -26,11 +27,14 @@ public class AgenceController {
 
     private final IAgenceService agenceService;
     private final IAgenceSimulation simulation;
+    private final IAgenceEmployeService agenceEmployes;
 
     public AgenceController(@Qualifier("agenceServiceImpl") IAgenceService agenceService,
-                            @Qualifier("agenceServiceImpl") IAgenceSimulation simulation) {
+                            @Qualifier("agenceServiceImpl") IAgenceSimulation simulation,
+                            IAgenceEmployeService agenceEmployes) {
         this.agenceService = agenceService;
         this.simulation = simulation;
+        this.agenceEmployes = agenceEmployes;
     }
 
     @GetMapping
@@ -67,6 +71,12 @@ public class AgenceController {
         agenceService.findById(id);          // lève l'exception "introuvable" → 404
         agence.setIdAgence(id);              // l'id du chemin gagne sur celui du corps
         return agenceService.save(agence);
+    }
+
+    // Étape 12 : affecter les employés d'une agence (pas de @Valid, voir étape 16)
+    @PutMapping("/{id}/employes")
+    public Agence ajouterEmployes(@PathVariable Long id, @RequestBody Agence agence) {
+        return agenceEmployes.ajouterEmployes(id, agence);
     }
 
     // Étape 25 : suppression

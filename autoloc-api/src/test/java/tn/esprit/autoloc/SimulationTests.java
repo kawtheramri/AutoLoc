@@ -64,7 +64,7 @@ public class SimulationTests {
 
     @Test
     public void simulationStandard3Jours() {
-        AgenceServiceImpl service = new AgenceServiceImpl(null, vehiculeService());
+        AgenceServiceImpl service = new AgenceServiceImpl(null, vehiculeService(), null);
         String rapport = service.simuler(agenceDeTest(), 3, VehiculeOffre.STANDARD);
 
         assertTrue(rapport.startsWith("Id : 11, Nom : Agence ariana, Tel : 71585874\n"));
@@ -73,7 +73,7 @@ public class SimulationTests {
 
     @Test
     public void simulationWeekend3Jours() {
-        AgenceServiceImpl service = new AgenceServiceImpl(null, vehiculeService());
+        AgenceServiceImpl service = new AgenceServiceImpl(null, vehiculeService(), null);
         String rapport = service.simuler(agenceDeTest(), 3, VehiculeOffre.WEEKEND);
 
         assertEquals(432.0, totalDe(rapport), 0.01);
@@ -81,7 +81,7 @@ public class SimulationTests {
 
     @Test
     public void simulationLongueDuree30Jours() {
-        AgenceServiceImpl service = new AgenceServiceImpl(null, vehiculeService());
+        AgenceServiceImpl service = new AgenceServiceImpl(null, vehiculeService(), null);
         String rapport = service.simuler(agenceDeTest(), 30, VehiculeOffre.LONGUE_DUREE);
 
         assertEquals(3937.5, totalDe(rapport), 0.01);

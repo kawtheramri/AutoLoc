@@ -4,19 +4,27 @@ import org.springframework.stereotype.Service;
 import tn.esprit.autoloc.Utils;
 import tn.esprit.autoloc.calcul.VehiculeOffre;
 import tn.esprit.autoloc.domain.Agence;
+import tn.esprit.autoloc.domain.Employe;
 import tn.esprit.autoloc.domain.Vehicule;
 import tn.esprit.autoloc.io.RapportFactory;
 import tn.esprit.autoloc.io.RapportTexte;
 import tn.esprit.autoloc.repository.IAgenceRepository;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
-public class AgenceServiceImpl extends GenericServiceImpl<Agence, Long> implements IAgenceService, IAgenceSimulation {
+public class AgenceServiceImpl extends GenericServiceImpl<Agence, Long> implements IAgenceService, IAgenceSimulation, IAgenceEmployeService {
 
     private final IVehiculeService vehiculeService;
+    private final IEmployeService employeService;
 
-    public AgenceServiceImpl(IAgenceRepository agenceRepository, IVehiculeService vehiculeService) {
+    public AgenceServiceImpl(IAgenceRepository agenceRepository,
+                             IVehiculeService vehiculeService,
+                             IEmployeService employeService) {
         super(agenceRepository);
         this.vehiculeService = vehiculeService;
+        this.employeService = employeService;
     }
 
     @Override
@@ -66,5 +74,29 @@ public class AgenceServiceImpl extends GenericServiceImpl<Agence, Long> implemen
         rapport.ecrireTotal(rapport.getTotal());   // le rapport retourne le total
 
         return rapport.contenu();
+    }
+
+    // Étape 12 (le @Transactional viendra à l'étape 17)
+    @Override
+    public Agence ajouterEmployes(Long idAgence, Agence donnees) {
+        Agence agence = findById(idAgence);
+
+        // 1. mettre à jour l'agence d'abord
+        agence.setNom(donnees.getNom());
+        agence.setAdresse(donnees.getAdresse());
+        agence.setTelephone(donnees.getTelephone());
+        agence.setVille(donnees.getVille());
+        save(agence);
+
+        // 2. insérer les employés avec le service des employés
+        List<Employe> nouveaux = new ArrayList<>(donnees.getEmployes());
+        for (Employe e : nouveaux) {
+            agence.addEmploye(e);
+            employeService.save(e);
+        }
+
+        // 3. effectif = taille de la liste
+        agence.setEffectif(nouveaux.size());
+        return save(agence);
     }
 }
