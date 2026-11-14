@@ -10,10 +10,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import tn.esprit.autoloc.calcul.VehiculeOffre;
 import tn.esprit.autoloc.domain.Agence;
 import tn.esprit.autoloc.service.IAgenceService;
+import tn.esprit.autoloc.service.IAgenceSimulation;
 
 import java.util.List;
 
@@ -22,9 +25,12 @@ import java.util.List;
 public class AgenceController {
 
     private final IAgenceService agenceService;
+    private final IAgenceSimulation simulation;
 
-    public AgenceController(@Qualifier("agenceServiceImpl") IAgenceService agenceService) {
+    public AgenceController(@Qualifier("agenceServiceImpl") IAgenceService agenceService,
+                            @Qualifier("agenceServiceImpl") IAgenceSimulation simulation) {
         this.agenceService = agenceService;
+        this.simulation = simulation;
     }
 
     @GetMapping
@@ -35,6 +41,14 @@ public class AgenceController {
     @GetMapping("/{id}")
     public Agence findById(@PathVariable Long id) {
         return agenceService.findById(id);
+    }
+
+    @GetMapping("/{id}/simuler")
+    public String simuler(@PathVariable Long id,
+                          @RequestParam("jours") int jours,
+                          @RequestParam("offre") VehiculeOffre offre) {
+        Agence agence = agenceService.findById(id);   // 404 si l'agence n'existe pas
+        return simulation.simuler(agence, jours, offre);
     }
 
     // Étape 21 : ajout

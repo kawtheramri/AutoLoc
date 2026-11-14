@@ -5,13 +5,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import tn.esprit.autoloc.domain.ModePaiement;
 import tn.esprit.autoloc.domain.Paiement;
+import tn.esprit.autoloc.exception.ResourceNotFoundException;
 import tn.esprit.autoloc.service.IPaiementService;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
 
 @SpringBootTest
 public class PaiementTests {
@@ -28,36 +30,21 @@ public class PaiementTests {
     }
 
     @Test
-    public void createPaiementEstLectureSeule() {
-        Paiement paiement = paiementLectureSeule();
+    public void findAllPaiements() {
+        List<Paiement> paiements = paiementService.findAll();
 
-        UnsupportedOperationException exception = assertThrows(
-                UnsupportedOperationException.class,
-                () -> paiementService.create(paiement)
-        );
-
-        assertEquals("Le paiement est en lecture seule", exception.getMessage());
+        fail("Paiements : " + paiements.size());
     }
 
     @Test
-    public void updatePaiementEstLectureSeule() {
-        Paiement paiement = paiementLectureSeule();
+    public void findPaiementParId() {
+        Paiement paiement = paiementService.findById(1L);
 
-        UnsupportedOperationException exception = assertThrows(
-                UnsupportedOperationException.class,
-                () -> paiementService.update(1L, paiement)
-        );
-
-        assertEquals("Le paiement est en lecture seule", exception.getMessage());
+        fail("Paiement : " + paiement.getIdPaiement());
     }
 
     @Test
-    public void deletePaiementEstLectureSeule() {
-        UnsupportedOperationException exception = assertThrows(
-                UnsupportedOperationException.class,
-                () -> paiementService.deleteById(1L)
-        );
-
-        assertEquals("Le paiement est en lecture seule", exception.getMessage());
+    public void findPaiementInexistant() {
+        assertThrows(ResourceNotFoundException.class, () -> paiementService.findById(9999L));
     }
 }

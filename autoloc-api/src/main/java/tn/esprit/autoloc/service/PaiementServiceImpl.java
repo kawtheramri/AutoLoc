@@ -30,19 +30,4 @@ public class PaiementServiceImpl extends GenericServiceImpl<Paiement, Long> impl
     public boolean check(Paiement paiement, boolean isNew) {
         return paiement != null;
     }
-
-    @Override
-    public Paiement create(Paiement entity) {
-        throw new UnsupportedOperationException("Le paiement est en lecture seule");
-    }
-
-    @Override
-    public Paiement update(Long id, Paiement entity) {
-        throw new UnsupportedOperationException("Le paiement est en lecture seule");
-    }
-
-    @Override
-    public void deleteById(Long id) {
-        throw new UnsupportedOperationException("Le paiement est en lecture seule");
-    }
 }

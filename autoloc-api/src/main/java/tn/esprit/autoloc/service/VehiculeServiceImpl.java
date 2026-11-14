@@ -2,14 +2,19 @@ package tn.esprit.autoloc.service;
 
 import org.springframework.stereotype.Service;
 import tn.esprit.autoloc.Utils;
+import tn.esprit.autoloc.calcul.StrategieOffres;
+import tn.esprit.autoloc.calcul.VehiculeOffre;
 import tn.esprit.autoloc.domain.Vehicule;
 import tn.esprit.autoloc.repository.IVehiculeRepository;
 
 @Service
 public class VehiculeServiceImpl extends GenericServiceImpl<Vehicule, Long> implements IVehiculeService {
 
-    public VehiculeServiceImpl(IVehiculeRepository vehiculeRepository) {
+    private final StrategieOffres strategies;
+
+    public VehiculeServiceImpl(IVehiculeRepository vehiculeRepository, StrategieOffres strategies) {
         super(vehiculeRepository);
+        this.strategies = strategies;
     }
 
     @Override
@@ -44,5 +49,10 @@ public class VehiculeServiceImpl extends GenericServiceImpl<Vehicule, Long> impl
                 && vehicule.getCategorie() != null
                 && vehicule.getTarifJournalier() != null
                 && vehicule.getStatut() != null;
+    }
+
+    @Override
+    public double calculTarif(Vehicule vehicule, int jours, VehiculeOffre offre) {
+        return strategies.get(offre).calculerTarif(vehicule, jours);
     }
 }
