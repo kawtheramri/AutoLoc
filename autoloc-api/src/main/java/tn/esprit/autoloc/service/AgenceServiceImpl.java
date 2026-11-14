@@ -1,6 +1,7 @@
 package tn.esprit.autoloc.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import tn.esprit.autoloc.Utils;
 import tn.esprit.autoloc.calcul.VehiculeOffre;
 import tn.esprit.autoloc.domain.Agence;
@@ -76,8 +77,9 @@ public class AgenceServiceImpl extends GenericServiceImpl<Agence, Long> implemen
         return rapport.contenu();
     }
 
-    // Étape 12 (le @Transactional viendra à l'étape 17)
+    // Étape 17 : une seule transaction pour les trois étapes (tout ou rien)
     @Override
+    @Transactional
     public Agence ajouterEmployes(Long idAgence, Agence donnees) {
         Agence agence = findById(idAgence);
 
