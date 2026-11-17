@@ -24,6 +24,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
 @Repository
@@ -46,7 +48,7 @@ class AgenceTests {
     @Qualifier("agenceServiceImpl")
     private IAgenceService agenceService;
 
-    private void addAgence(CrudRepository<Agence, Long> repository) {
+    private Agence addAgence(CrudRepository<Agence, Long> repository) {
         int timestamp = (int) System.currentTimeMillis();
 
         Vehicule v1 = Vehicule.builder()
@@ -78,7 +80,7 @@ class AgenceTests {
         v1.setAgence(agence);
         v2.setAgence(agence);
 
-        repository.save(agence);
+        return repository.save(agence);
     }
 
     @Test
@@ -100,12 +102,19 @@ class AgenceTests {
 
     @Test
     void basicAddAgence() {
-        addAgence(basicAgenceRepository);
+        Agence saved = addAgence(basicAgenceRepository);
+
+        assertNotNull(saved);
+        assertNotNull(saved.getIdAgence(), "L'agence creee doit avoir un identifiant");
     }
 
     @Test
     void fullAddAgence() {
-        addAgence(fullAgenceRepository);
+        Agence saved = addAgence(fullAgenceRepository);
+
+        assertNotNull(saved);
+        assertNotNull(saved.getIdAgence(), "L'agence creee doit avoir un identifiant");
+        assertEquals(2, saved.getVehicules().size(), "L'agence doit contenir ses 2 vehicules");
     }
 
     private void loadAgence(CrudRepository<Agence, Long> repository, String repoName) {
