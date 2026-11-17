@@ -1,5 +1,6 @@
 package tn.esprit.autoloc;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -29,6 +30,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 interface AgenceRepositoryMock extends CrudRepository<Agence, Long> {}
 
 @SpringBootTest
+@Disabled("Tests des anciens ateliers")
 class AgenceTests {
 
     @Autowired

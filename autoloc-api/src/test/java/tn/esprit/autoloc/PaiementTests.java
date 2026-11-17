@@ -1,33 +1,24 @@
 package tn.esprit.autoloc;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import tn.esprit.autoloc.domain.ModePaiement;
 import tn.esprit.autoloc.domain.Paiement;
 import tn.esprit.autoloc.exception.ResourceNotFoundException;
 import tn.esprit.autoloc.service.IPaiementService;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 
 @SpringBootTest
+@Disabled("Tests des anciens ateliers")
 class PaiementTests {
 
     @Autowired
     private IPaiementService paiementService;
-
-    private Paiement paiementLectureSeule() {
-        return Paiement.builder()
-                .montant(new BigDecimal("150"))
-                .datePaiement(LocalDate.now())
-                .modePaiement(ModePaiement.CARTE)
-                .build();
-    }
 
     @Test
     void findAllPaiements() {

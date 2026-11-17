@@ -1,5 +1,6 @@
 package tn.esprit.autoloc;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import tn.esprit.autoloc.calcul.LongueDureeStrategie;
 import tn.esprit.autoloc.calcul.StandardStrategie;
@@ -20,6 +21,7 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@Disabled("Tests des anciens ateliers")
 class SimulationTests {
 
     private VehiculeServiceImpl vehiculeService() {

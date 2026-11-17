@@ -3,7 +3,7 @@ package tn.esprit.autoloc.service;
 import java.util.List;
 
 public interface IGenericService<T, I>
-        extends IReadService<T, I>, IWriteService<T, I>, IDeleteService<I> {
+        extends IReadService<T, I>, IWriteService<T>, IDeleteService<I> {
 
     boolean check(T entity, boolean isNew);
 

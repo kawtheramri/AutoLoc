@@ -7,6 +7,7 @@ import tn.esprit.autoloc.domain.Agence;
 import tn.esprit.autoloc.exception.ResourceNotFoundException;
 import tn.esprit.autoloc.repository.IAgenceRepository;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -53,7 +54,7 @@ public class BasicAgenceServiceImpl implements IAgenceService {
 
     @Override
     public List<Agence> findAll() {
-        return null;
+        return Collections.emptyList();
     }
 
     @Override
