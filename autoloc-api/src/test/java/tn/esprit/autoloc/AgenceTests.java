@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 interface AgenceRepositoryMock extends CrudRepository<Agence, Long> {}
 
 @SpringBootTest
-public class AgenceTests {
+class AgenceTests {
 
     @Autowired
     private AgenceRepositoryMock basicAgenceRepository;
@@ -80,7 +80,7 @@ public class AgenceTests {
     }
 
     @Test
-    public void createAgence() {
+    void createAgence() {
         int timestamp = (int) System.currentTimeMillis();
 
         Agence agence = Agence.builder()
@@ -97,12 +97,12 @@ public class AgenceTests {
     }
 
     @Test
-    public void basicAddAgence() {
+    void basicAddAgence() {
         addAgence(basicAgenceRepository);
     }
 
     @Test
-    public void fullAddAgence() {
+    void fullAddAgence() {
         addAgence(fullAgenceRepository);
     }
 
@@ -130,17 +130,17 @@ public class AgenceTests {
     }
 
     @Test
-    public void basicLoadAgence() {
+    void basicLoadAgence() {
         loadAgence(basicAgenceRepository, "basicAgenceRepository");
     }
 
     @Test
-    public void fullLoadAgence() {
+    void fullLoadAgence() {
         loadAgence(fullAgenceRepository, "fullAgenceRepository");
     }
 
     @Test
-    public void loadSortedAgences() {
+    void loadSortedAgences() {
         List<Agence> agences = fullAgenceRepository.findAll(Sort.by("idAgence").descending());
         StringBuilder result = new StringBuilder();
 
@@ -152,7 +152,7 @@ public class AgenceTests {
     }
 
     @Test
-    public void loadPagedAgences() {
+    void loadPagedAgences() {
         StringBuilder result = new StringBuilder();
         int pageNum = 0;
         int pageSize = 2;
@@ -202,12 +202,12 @@ public class AgenceTests {
     }
 
     @Test
-    public void basicUpdateAgence() {
+    void basicUpdateAgence() {
         updateAgence(basicAgenceRepository, "basicAgenceRepository");
     }
 
     @Test
-    public void fullUpdateAgence() {
+    void fullUpdateAgence() {
         updateAgence(fullAgenceRepository, "fullAgenceRepository");
     }
 
@@ -248,12 +248,12 @@ public class AgenceTests {
     }
 
     @Test
-    public void basicDeleteAgence() {
+    void basicDeleteAgence() {
         deleteAgence(basicAgenceRepository, "basicAgenceRepository");
     }
 
     @Test
-    public void fullDeleteAgence() {
+    void fullDeleteAgence() {
         deleteAgence(fullAgenceRepository, "fullAgenceRepository");
     }
 }

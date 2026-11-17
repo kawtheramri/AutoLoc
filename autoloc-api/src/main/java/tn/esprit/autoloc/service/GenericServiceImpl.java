@@ -5,17 +5,17 @@ import tn.esprit.autoloc.exception.ResourceNotFoundException;
 
 import java.util.List;
 
-public abstract class GenericServiceImpl<T, ID> implements IGenericService<T, ID> {
+public abstract class GenericServiceImpl<T, I> implements IGenericService<T, I> {
 
-    private final JpaRepository<T, ID> repository;
+    private final JpaRepository<T, I> repository;
 
-    protected GenericServiceImpl(JpaRepository<T, ID> repository) {
+    protected GenericServiceImpl(JpaRepository<T, I> repository) {
         this.repository = repository;
     }
 
     protected abstract String getEntityName();
 
-    protected abstract ID getId(T entity);
+    protected abstract I getId(T entity);
 
     protected abstract void setFields(T existing, T updated);
 
@@ -33,7 +33,7 @@ public abstract class GenericServiceImpl<T, ID> implements IGenericService<T, ID
 
     @Override
     public T save(T entity) {
-        ID id = getId(entity);
+        I id = getId(entity);
         if (id == null) {
             return create(entity);
         }
@@ -41,7 +41,7 @@ public abstract class GenericServiceImpl<T, ID> implements IGenericService<T, ID
     }
 
     @Override
-    public T findById(ID id) {
+    public T findById(I id) {
         return repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(getEntityName(), String.valueOf(id)));
     }
@@ -52,7 +52,7 @@ public abstract class GenericServiceImpl<T, ID> implements IGenericService<T, ID
     }
 
     @Override
-    public T update(ID id, T entity) {
+    public T update(I id, T entity) {
         T existing = findById(id);
         if (!check(entity, false)) {
             throw new IllegalArgumentException("La vérification de " + getEntityName() + " a échoué");
@@ -62,7 +62,7 @@ public abstract class GenericServiceImpl<T, ID> implements IGenericService<T, ID
     }
 
     @Override
-    public void deleteById(ID id) {
+    public void deleteById(I id) {
         if (!repository.existsById(id)) {
             throw new ResourceNotFoundException(getEntityName(), String.valueOf(id));
         }

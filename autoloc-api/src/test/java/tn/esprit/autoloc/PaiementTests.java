@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 
 @SpringBootTest
-public class PaiementTests {
+class PaiementTests {
 
     @Autowired
     private IPaiementService paiementService;
@@ -30,21 +30,21 @@ public class PaiementTests {
     }
 
     @Test
-    public void findAllPaiements() {
+    void findAllPaiements() {
         List<Paiement> paiements = paiementService.findAll();
 
         fail("Paiements : " + paiements.size());
     }
 
     @Test
-    public void findPaiementParId() {
+    void findPaiementParId() {
         Paiement paiement = paiementService.findById(1L);
 
         fail("Paiement : " + paiement.getIdPaiement());
     }
 
     @Test
-    public void findPaiementInexistant() {
+    void findPaiementInexistant() {
         assertThrows(ResourceNotFoundException.class, () -> paiementService.findById(9999L));
     }
 }

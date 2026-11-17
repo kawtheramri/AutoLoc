@@ -20,7 +20,7 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class SimulationTests {
+class SimulationTests {
 
     private VehiculeServiceImpl vehiculeService() {
         return new VehiculeServiceImpl(null, null, null, new StrategieOffres(List.of(
@@ -63,7 +63,7 @@ public class SimulationTests {
     }
 
     @Test
-    public void simulationStandard3Jours() {
+    void simulationStandard3Jours() {
         AgenceServiceImpl service = new AgenceServiceImpl(null, vehiculeService(), null);
         String rapport = service.simuler(agenceDeTest(), 3, VehiculeOffre.STANDARD);
 
@@ -72,7 +72,7 @@ public class SimulationTests {
     }
 
     @Test
-    public void simulationWeekend3Jours() {
+    void simulationWeekend3Jours() {
         AgenceServiceImpl service = new AgenceServiceImpl(null, vehiculeService(), null);
         String rapport = service.simuler(agenceDeTest(), 3, VehiculeOffre.WEEKEND);
 
@@ -80,7 +80,7 @@ public class SimulationTests {
     }
 
     @Test
-    public void simulationLongueDuree30Jours() {
+    void simulationLongueDuree30Jours() {
         AgenceServiceImpl service = new AgenceServiceImpl(null, vehiculeService(), null);
         String rapport = service.simuler(agenceDeTest(), 30, VehiculeOffre.LONGUE_DUREE);
 
