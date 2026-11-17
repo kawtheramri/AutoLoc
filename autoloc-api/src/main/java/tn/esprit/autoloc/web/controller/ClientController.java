@@ -17,6 +17,7 @@ import tn.esprit.autoloc.service.IClientService;
 
 import java.util.List;
 
+@SuppressWarnings("java:S4684")
 @RestController
 @RequestMapping("/clients")
 public class ClientController {

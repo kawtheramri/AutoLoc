@@ -17,6 +17,7 @@ import tn.esprit.autoloc.service.IMaintenanceService;
 
 import java.util.List;
 
+@SuppressWarnings("java:S4684")
 @RestController
 @RequestMapping("/maintenances")
 public class MaintenanceController {

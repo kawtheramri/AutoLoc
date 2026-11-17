@@ -17,6 +17,7 @@ import tn.esprit.autoloc.service.IEquipementService;
 
 import java.util.List;
 
+@SuppressWarnings("java:S4684")
 @RestController
 @RequestMapping("/equipements")
 public class EquipementController {

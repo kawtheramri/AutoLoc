@@ -21,6 +21,7 @@ import tn.esprit.autoloc.service.IAgenceSimulation;
 
 import java.util.List;
 
+@SuppressWarnings("java:S4684")
 @RestController
 @RequestMapping("/agences")
 public class AgenceController {
